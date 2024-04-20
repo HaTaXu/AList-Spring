@@ -8,8 +8,8 @@ import lombok.Data;
 @Table(name = "user")
 public class User {
     public static final int GENERAL = 0;
-    public static final int GUEST = 0;
-    public static final int ADMIN = 0;
+    public static final int GUEST = 1;
+    public static final int ADMIN = 2;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +25,6 @@ public class User {
     private int pwdTS;
 
     private String salt;
-
-    @Transient
-    private String password;
 
     @Column(name = "user_group")
     private String userGroup;
@@ -47,11 +44,20 @@ public class User {
 
     private String authn;
 
-    protected User() {}
+    public User() {}
+
+    public User(String username, String pwdHash, int pwdTS, String salt, int role, int permission) {
+        this.username = username;
+        this.pwdHash = pwdHash;
+        this.pwdTS = pwdTS;
+        this.salt = salt;
+        this.role = role;
+        this.permission = permission;
+    }
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", username=" + username + ", role=" + role + ", password=" + password + "]";
+        return "User [id=" + id + ", username=" + username + ", role=" + role + ", salt=" + salt + "]";
     }
 
     public boolean isGuest() {
